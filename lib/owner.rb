@@ -5,6 +5,7 @@ require_relative 'dog.rb'
 class Owner
   attr_reader :name, :species
   @@all = []
+  @@flag = false
 
   def initialize(name)
     @name = name
@@ -36,9 +37,15 @@ class Owner
   end
 
   def dogs
-    Dog.all.select do |dog|
+    dogs = Dog.all.select do |dog|
       dog.owner == self
     end
+
+    # if dogs.count >3
+    #   dogs.delete_at(0)
+    # end
+    # dogs
+    # binding.pry
   end
 
   def find_cat_name(name) # returns object
@@ -48,8 +55,8 @@ class Owner
   end
 
   def find_dog_name(name) # returns object
-    Cat.all.find do |cat|
-      cat.name == name
+    Dog.all.find do |dog|
+      dog.name == name
     end
   end
 
@@ -61,10 +68,16 @@ class Owner
   end
 
   def buy_dog(name)
-    dog_to_buy = find_dog_name(name)
-    Dog.all.delete(dog_to_buy)
-    dog_to_buy.owner = self
-    Dog.all << dog_to_buy
+    
+    
+    if find_dog_name(name)
+      dog_to_buy = find_dog_name(name)
+      self.dogs.delete(dog_to_buy)
+      
+    end
+      self.dogs << Dog.new(name, self)
+    
+      
   end
 
   def walk_dogs
